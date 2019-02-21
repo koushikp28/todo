@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body onload="display()">
+    <script>
+        const $ = a => document.getElementById(a);
+        var arr = [{username: 'koushik', userid: '123',gender:'Male'},{username: '1', userid: '123',gender:'Male'},{username: '2', userid: '123',gender:'Male'}];
+        var flag=0,ids=0,c=0;
+
+        function add(){
+          clear();
+        var flag=0;
+        if($("emp_name").value==""|| $("emp_id").value==""){
+          console.log("yes");
+          $("dem").innerHTML="Enter all the values";
+          return;
+        }
+        var name = $("emp_name").value;  
+        for (var i=0;i<arr.length;i++){
+            if(arr[i].username==name){
+                flag=1;
+            }
+        }
+        if(flag!=1 && check2()==true){
+            arr.push({
+            username: $("emp_name").value,
+            userid: $("emp_id").value,
+            gender: $("emp_gender").value
+            });
+            display();
+        }
+        else{
+          $("dem").innerHTML="Employee already exists";
+          $("emp_name").focus()
+        }
+        }
+        function del(){
+            clear();
+            var delall= $("dellall");
+            var d= document.getElementsByClassName("deleting");
+            if(delall.checked==true){
+              arr.splice(k,d.length);    
+            }
+            else{
+            for(var k=d.length-1;k>=0;k--){
+              if(d[k].checked==true)
+              {
+              arr.splice(k,1);
+              c=c+1;
+              }
+            }
+            if(c==0){
+                $("dem").innerHTML="Please select atleast once";     
+            }
+            }
+            display();
+        }
+        function check1(){
+          clear();
+          var name = $("emp_name").value;
+          for (var i=0;i<arr.length;i++){  
+            if(arr[i].username==name){
+                $("dem").innerHTML="Employee already exists";
+                $("emp_name").focus();
+                $("emp_name").style="border-Color:red";
+                //$("dem").innerHTML="";
+            }
+            else{
+                $("emp_name").style="border-Color:none";
+            }
+          }
+          //check2(); 
+
+        }
+        function check2(){
+          clear();
+          if($("emp_name").value==""|| $("emp_id").value==""){
+            $("dem").innerHTML="Enter all the values";
+            return false;
+          }
+          else{
+            return true;
+          }
+        }
+        function selectall(){
+          clear();
+          var d=document.getElementsByClassName("deleting");
+          var delall=$("dellall");
+          if(delall.checked==true){
+          for(var k=d.length-1;k>=0;k--){
+              d[k].checked=true;
+            }
+          }
+          else if(delall.checked==false){
+            for(var k=d.length-1;k>=0;k--){
+              d[k].checked=false;
+            }
+          }
+        }
+        function display(){
+          var text = "<table border ='2'><tr><th><input type='checkbox' id='dellall' onchange='selectall()'/></th><th>Empname</th><th>Empid</th><th>Gender</th></tr>"
+            for (var i=0;i<arr.length;i++){
+            text+="<tr><td><input type='checkbox' class='deleting' id="+i+"/> </td><td>"+arr[i].username+"</td><td>"+arr[i].userid+"</td><td>"+arr[i].gender+"</td></tr>"				
+            }
+            text+="</table>";
+            $("demo").innerHTML=text;
+
+        }
+        function update(){
+          clear();
+          var c=0,a=0;
+          var d=document.getElementsByClassName("deleting");
+          for(var k=0;k<d.length;k++){
+              if(d[k].checked==true)
+              {
+              c=c+1;
+              a=k;
+              }
+              if(c>1){
+                $("dem").innerHTML="Multiple items cannot update at once";
+              }
+            }
+          if(c==1){
+            $("emp_name").value=arr[a].username;
+            $("emp_name").disabled = true;
+            $("emp_id").value=arr[a].userid;
+            $("emp_gender").value=arr[a].gender;
+            $("bottom1").style.display="none";
+            $("bottom2").style.display="block";
+            
+            $("updating1").style.display="inline";
+            $("adding").style.display="none";
+          }
+          if(c==0){
+                $("dem").innerHTML="Please select atleast once";        
+          }
+        }
+        function cancel(){
+          var d=document.getElementsByClassName("deleting");
+          for(var k=0;k<d.length;k++){
+              if(d[k].checked=true){
+                d[k].checked=false;
+              }
+            }
+          $("emp_name").disabled = false;  
+          $("emp_name").style="border-Color:none";
+          $("bottom1").style.display="block";
+          $("bottom2").style.display="none";
+          $("updating1").style.display="none";
+          $("adding").style.display="inline";
+          $("emp_name").value="";
+          $("emp_id").value="";
+          $("emp_gender").value="";
+
+
+
+        }
+        function updatedetails(){
+          clear();
+          var c=0,a=0;
+          var d=document.getElementsByClassName("deleting");
+          for(var k=0;k<d.length;k++){
+              if(d[k].checked==true)
+          {
+              c=c+1;
+              a=k;
+              }
+              if(c>1){
+                $("dem").innerHTML="Multiple items cannot update at once";
+              }
+              if(c==0){
+                $("dem").innerHTML="Please select atleast once";        
+              }
+            }
+          if(c==1){
+            arr[a].userid=$("emp_id").value;
+            arr[a].gender=$("emp_gender").value;
+            display();
+            $("emp_name").disabled = false;  
+            $("dem").innerHTML="Details Updated";
+            $("bottom1").style.display="block";
+            $("bottom2").style.display="none";
+            $("updating1").style.display="none";
+            $("adding").style.display="inline";
+            $("emp_name").style="border-Color:none";
+            $("emp_name").value=null;
+            $("emp_id").value=null;  
+            $("emp_gender").value=null;  
+          
+
+          }
+        }
+        function clear(){
+          $("dem").innerHTML=" ";     
+        }
+
+    </script>
+
+    <div id="top">
+        <h2 >Employee</h2>
+        <label for="emp_name">Name:</label>
+        <input type="text" pattern="[A-Za-z]" id="emp_name" placeholder="Employee Name"  onfocusout="check1()" required/>
+        <label for="emp_id">ID:</label>
+        <input type="text"  id="emp_id" placeholder="Employee ID" onchange="check2()" />
+        <label for="emp_gender">Gender:</label>
+        <select id="emp_gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        </select>
+        
+        <input id="adding" type="submit" value="ADD" onclick="add()" />&nbsp;&nbsp;&nbsp;
+        <button id="updating1" onclick="updatedetails()">Update Details</button>
+        
+        <p id="dem" styele="background-color=" onload="display()">
+          </p> 
+    </div> 
+    <div id="demo" onload="display()">
+    </div>
+    <div id="bottom1"> 
+        <input type="submit" value="Delete" onclick="del()" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="Update" onclick="update()" />     
+    </div>
+    <div id="bottom2">
+        <button id="updating2" onclick="cancel()">Cancel</button>
+    </div>  
+
+</body>
+</html> 
